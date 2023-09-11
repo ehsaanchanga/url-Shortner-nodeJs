@@ -7,18 +7,22 @@ const generateNewShortUrl = async (req, res) => {
   if (!body.url) return res.status(400).json({ message: "Url is required" });
 
   const id = shortId.generate();
+
+  console.log(req?.user?._id);
   await URL.create({
     shortId: id,
     redirectUrl: body.url,
     visitHistory: [],
+    createdBy: req?.user?._id,
   });
-  res.redirect("/url");
+  res.redirect("/");
   return res.render("home", { id });
 };
 
 const redirectUrl = async (req, res) => {
   const shortId = req.params.id;
 
+  console.log(shortId);
   const entry = await URL.findOneAndUpdate(
     { shortId },
     {
@@ -30,13 +34,11 @@ const redirectUrl = async (req, res) => {
     }
   );
 
-  res.redirect(entry.redirectUrl);
+  res.redirect(entry?.redirectUrl);
 };
 
 const showAnalytics = async (req, res) => {
   const shortId = req.params.shortId;
-
-  console.log(shortId, "shortId");
 
   const result = await URL.findOne({ shortId });
   if (!result) {
@@ -48,17 +50,8 @@ const showAnalytics = async (req, res) => {
   });
 };
 
-const test = async (req, res) => {
-  const allUrls = await URL.find({});
-  console.log(allUrls);
-  return res.render("home", {
-    urls: allUrls,
-  });
-};
-
 module.exports = {
   generateNewShortUrl,
   redirectUrl,
   showAnalytics,
-  test,
 };

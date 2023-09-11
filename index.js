@@ -3,6 +3,7 @@ const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const connectDb = require("./config/dbConn");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 
@@ -15,7 +16,7 @@ connectDb();
 app.set("view engine", "ejs");
 
 //serve static files
-app.use("/url", express.static(path.join(__dirname, "/public")));
+app.use("/", express.static(path.join(__dirname, "/public")));
 
 // Middlewares
 
@@ -25,9 +26,14 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(express.json());
 
+// middleware for cookies
+app.use(cookieParser());
+
 // Routes
-//static routes
-app.use("/url", require("./routes/url"));
+app.use("/", require("./routes/staticRouter"));
+
+app.use("/register", require("./routes/api/register"));
+app.use("/authenticate", require("./routes/api/auth"));
 // api routes
 app.use("/api/url", require("./routes/api/url"));
 
