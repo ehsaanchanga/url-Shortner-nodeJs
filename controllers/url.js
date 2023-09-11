@@ -8,7 +8,6 @@ const generateNewShortUrl = async (req, res) => {
 
   const id = shortId.generate();
 
-  console.log(req?.user?._id);
   await URL.create({
     shortId: id,
     redirectUrl: body.url,

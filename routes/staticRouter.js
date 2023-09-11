@@ -1,8 +1,5 @@
 const express = require("express");
-const {
-  checkAuth,
-  verifyAuthentication,
-} = require("../middlewares/verifyAuthentication");
+const { verifyAuthentication } = require("../middlewares/verifyAuthentication");
 const router = express.Router();
 
 const URL = require("../models/Url");

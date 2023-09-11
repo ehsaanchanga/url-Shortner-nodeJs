@@ -20,17 +20,19 @@ const authenticateUser = async (req, res) => {
 
   const match = await bcrypt.compare(password, foundUser.password);
   if (match) {
+    const roles = Object.values(foundUser.roles).filter(Boolean);
+
     const accessToken = jwt.sign(
       {
-        userInfo: foundUser,
+        userInfo: { ...foundUser, roles: roles },
       },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "2d" }
     );
 
-    // res.cookie("accessToken", accessToken);
+    res.cookie("accessToken", accessToken);
 
-    res.json(accessToken);
+    // res.json({ roles, accessToken });
 
     res.redirect("/");
   } else {

@@ -11,6 +11,11 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     email: { type: String, required: true, unique: true },
+    roles: {
+      Normal: { type: String, default: "normal" },
+      Admin: String,
+      SuperAdmin: String,
+    },
     password: { type: String, required: true },
   },
   {
